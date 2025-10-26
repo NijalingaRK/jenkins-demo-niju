@@ -1,0 +1,26 @@
+---
+- name: Deploy HTML website
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure web directory exists
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    - name: Copy website files
+      copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
